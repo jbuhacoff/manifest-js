@@ -1,0 +1,59 @@
+{
+  "name": "@jbuhacoff/manifest",
+  "version": "1.0.0",
+  "description": "Automates and coordinates actions on repositories",
+  "files": [
+    "src/manifest.js"
+  ],
+  "main": "src/manifest",
+  "preferGlobal": "true",
+  "bin": {
+    "manifest": "src/manifest.js"
+  },
+  "scripts": {
+    "clean": "exit 0",
+    "deps": "dep-check",
+    "pkg": "pkg-check",
+    "start": "exit 0",
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbuhacoff/manifest-js.git"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "manyrepos",
+    "git",
+    "subversion",
+    "svn",
+    "repository",
+    "manifest",
+    "source",
+    "control",
+    "scm",
+    "vcs"
+  ],
+  "author": {
+    "name": "Jonathan Buhacoff",
+    "email": "jonathan@buhacoff.net",
+    "url": "https://github.com/jbuhacoff"
+  },
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/jbuhacoff/manifest-js/issues"
+  },
+  "homepage": "https://github.com/jbuhacoff/manifest-js#readme",
+  "dependencies": {
+    "deasync": "^0.1.15",
+    "js-yaml": "^3.13.1",
+    "simple-git": "^1.113.0",
+    "yargs": "^13.2.4"
+  },
+  "devDependencies": {
+    "@commitlint/utils": "^8.0.0",
+    "@jbuhacoff/commitlint-config-type-enum": "^1.0.0"
+  }
+}
