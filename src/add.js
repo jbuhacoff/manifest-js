@@ -30,7 +30,6 @@ exports.handler = function (argv) {
     }
     relpath = npath.substr(cwd.length+1).replace(/\\/g,"/");
     var info = libinfo.getRepositoryInfo(npath);
-    console.log("add relpath = %s", relpath);
     // read existing manifest, add new content, and write edited manifest
     var currentManifestName = libinfo.readCurrentManifestName();
     var content = libinfo.readManifestContent(currentManifestName);

@@ -40,12 +40,10 @@ const execFileSyncWrapper = function(cmd,args,options)  {
             return execFileSync(cmd,args,options);
         }
         else {
-            console.log("windows, not cygwin, path.sep = %s", path.sep);
             // need to convert cwd (which we reference with forward slashes) to windows (with backslashes)
             if( options.cwd ) {
                 options.cwd = options.cwd.replace(/\//g,path.sep);
             }
-            console.log("cwd: %s", options.cwd);
             return execFileSync(cmd,args,options);
         }
     }

@@ -14,7 +14,6 @@ function isCygwinCheck() {
             return {cygwin:true,cygpath:cygpath};
         }
     }
-    console.log("NOT CYGWIN???");
     return {cygwin:false};
 };
 
