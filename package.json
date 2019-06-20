@@ -48,17 +48,11 @@
   "homepage": "https://github.com/jbuhacoff/manifest-js#readme",
   "dependencies": {
     "blob": "0.0.5",
-    "cheerio": "^1.0.0-rc.3",
     "deasync": "^0.1.15",
     "fetch": "^1.1.0",
     "i": "^0.3.6",
     "js-yaml": "^3.13.1",
-    "jsonframe": "0.0.2",
-    "jsonframe-cheerio": "^3.0.1",
-    "line-reader": "^0.4.0",
-    "request": "^2.88.0",
     "simple-git": "^1.116.0",
-    "xmlhttprequest": "^1.8.0",
     "yargs": "^13.2.4"
   },
   "devDependencies": {
