@@ -49,7 +49,7 @@
   "dependencies": {
     "deasync": "^0.1.15",
     "js-yaml": "^3.13.1",
-    "simple-git": "^1.113.0",
+    "simple-git": "^1.116.0",
     "yargs": "^13.2.4"
   },
   "devDependencies": {
