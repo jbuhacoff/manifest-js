@@ -62,3 +62,6 @@ typings/
 
 # Temporary files
 ~*
+
+# vscode
+.vscode
