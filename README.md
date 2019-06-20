@@ -1,10 +1,14 @@
 # manifest-js
 
-Checkout specific tags, branches, or commits from multiple repositories into locations specified in a manifest file.
+A tool for people who work with many repositories. One manifest to rule them all.
+
+Checkout specific tags, branches, or commits from multiple repositories into
+locations specified in a manifest file. Create and merge branches in a set
+of repositories with one command.
 
 The `manifest` tool is written in JavaScript and packaged with `npm`.
 
-Why use manifest? You might be interested in this tool if:
+Why use `manifest`? You might be interested in this tool if:
 
 * your code is in multiple repositories
 * it's tedious to create, merge, and delete branches in each repository
@@ -191,9 +195,10 @@ Command behavior:
 
 The command `manifest init .` will initialize the manifest using the content of the
 current directory. Note that you cannot use any other directory path instead of `.` 
-because the manifest is created "here", so it wouldn't make sense to initialzie it
-with directories that are not "here" and then all the rest of the manifest commands
-would not work.
+because the manifest is created in your workspace which is assumed to be the
+current directory, and all repositories are required to be at a path relative to
+the workspace. This makes the manifest reusable by many people who may clone the
+entire workspace into any directory they want.
 
 All the repositories specified by the manifest file at `<url>` will be cloned
 into the current directory, which
@@ -324,6 +329,15 @@ branch `v1.0+next`, the command `manifest branch +feature#123` will create branc
 `master+feature#123` in repository A and branch `v1.0+next+feature#123` in 
 repository B.
 
+## Updating repositories
+
+To keep your branches up to date with remote changes, you could run `git pull`
+in each repository like this:
+
+```
+manifest exec git pull
+```
+
 ## Commiting changes to repositories
 
 The manifest tool does not commit changes for you. The changes in each repository may
@@ -335,8 +349,6 @@ commit in each repository via the `exec` command, which should be used very care
 This would execute the command `git commit -m <message>` in each repository listed
 in the manifest. It might be appropriate for housekeeping tasks like doing a similar
 fix in each repository. 
-
-
 
 ## Using local repositories
 
