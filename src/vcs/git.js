@@ -202,3 +202,16 @@ exports.merge = function(filepath, fromVcsRef) {
         throw e;
     }
 };
+
+exports.clone = function(repoURL, repo) {
+    try {
+        newRepoDir = path.join(process.cwd(), repo);
+        const newRepo = libgit();
+        const cloneSync = deasync(newRepo.clone.bind(newRepo));
+        const result = cloneSync(repoURL, newRepoDir);
+    }
+    catch(e) {
+        console.error("git.clone error", e);
+        throw e;
+    }
+};

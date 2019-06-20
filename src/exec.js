@@ -35,7 +35,7 @@ exports.builder = function (yargs) {
     });
 };
 exports.handler = function (argv) {
-    // read the current manifest
+    // read the current manifest 
     var currentManifestName = libinfo.readCurrentManifestName();
     var content = libinfo.readManifestContent(currentManifestName);
     var repoList = Object.getOwnPropertyNames(content);
