@@ -47,10 +47,7 @@
   },
   "homepage": "https://github.com/jbuhacoff/manifest-js#readme",
   "dependencies": {
-    "blob": "0.0.5",
     "deasync": "^0.1.15",
-    "fetch": "^1.1.0",
-    "i": "^0.3.6",
     "js-yaml": "^3.13.1",
     "simple-git": "^1.116.0",
     "yargs": "^13.2.4"
