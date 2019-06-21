@@ -47,18 +47,10 @@ Create a workspace directory. For example:
 mkdir workspace && cd workspace
 ```
 
-In scripts below we will refer to this workspace directory as `$WORKSPACE_PATH`.
-
-Someone who is already working on the project gives you the URL to the
-manifest repository and tells you that you'll need to checkout the `current`
-repository set from which to create your own feature branch.
-
-Let's define these for this example:
-
-```
-MANIFEST_URL=git+ssh://example.com/manifest-repository
-MANIFEST_REF=current
-```
+In scripts below we will refer to this directory as the workspace directory,
+and it can be anywhere that is convenient for you in your filesystem.
+All `manifest` commands should be executed from this directory and will only
+operate on repositories under that directory.
 
 See usage information:
 
@@ -79,7 +71,7 @@ in the workspace. This command will add it to the manifest in its current state.
 
 Command behavior:
 
-Edits `.manifest/ref/$MANIFEST_REF.yaml` to add the repository path relative to the workspace,
+Edits the current manifest to add the repository path relative to the workspace,
 and the current tag, branch, or commit id. If there is a tag pointing to the current
 commit id, it will be used. Otherwise the current branch will be used. Otherwise
 the current commit id will be used. If the repository is already configured to pull
@@ -92,14 +84,14 @@ warning is emitted.
 ## Branch
 
 ```
-manifest branch <name>
+manifest branch <name> [--create]
 ```
 
 Command behavior:
 
 Create a new manifest `<name>`. 
 
-Create a branch named `<name>` in each repository listed in the `$MANIFEST_REF`
+Create a branch named `<name>` in each repository listed in the current
 manifest.
 
 If `<name>` starts with `+`, prepends current ref (branch name or commit) to
@@ -110,6 +102,11 @@ repository B is on branch `master`, and
 the name specified in the command is `+feature#1234-short-title` the
 branch name in A will be `v1.0+next+feature#1234-short-title`, while the branch 
 name in B will be `master+feature#1234-short-title`. 
+
+If the `--create` option is specified, a new manifest file will also be 
+created with the same `<name>` and it will store the same list of repositories but
+with the new branch name for each one. If `<name>` starts with `+`, the new manifest
+name will also be prepended with the current manifest name.
 
 ## Checkout
 
@@ -125,11 +122,6 @@ Git doesn't allow checking out a tag directly -- you have to create a branch bec
 the tag is not editable. The tool automatically creates a branch named `{tag}+next`.
 If the repository is configured to point to a specific commit in the manifest, a new
 branch will automatically be created `{commit}+next`.
-
-When you switch from feature 2 to feature 1, if there is a stash on feature 1 it
-will be automatically restored and a notice will be displayed.
-Otherwise the feature 1 repository set will be checked
-out according to the `$MANIFEST_REF`.
 
 ## Create
 
@@ -362,3 +354,20 @@ It's recommended to keep the manifest repository itself always on the `master` b
 it can be used for immediate sharing of newly created or deleted manifest names with the
 team. 
 
+# Design
+
+## Manifest files
+
+A workspace can have multiple manifest files to allow easy transitions from one set of
+repositories with their branches to another set. 
+
+Each manifest file is stored at `.manifest/ref/{name}.yaml`
+
+## Current manifest
+
+A special file named `current` points the `manifest` tool at the current manifest for
+the workspace.
+
+The name of the current manifest is stored in the file `.manifest/current`.
+If the variable `{current}` is the content of that file, then it corresponds to
+a manifest file stored at `.manifest/ref/{current}.yaml`. 
