@@ -7,7 +7,20 @@ const libinfo = require('./lib/info');
 
 exports.command = 'merge <ref>';
 exports.describe = 'merge each repository from the specified manifest into the current one';
+exports.builder = function (yargs) {
+    return yargs.positional('ref', {
+        describe: 'merge repository <ref> into workspace'
+    })
+    .option('delete', {
+        describe: 'delete merged branch, if merged successfully'
+    })
+};
 exports.handler = function (argv) {
+    // check if proposed merge file exists
+    if( !fs.existsSync('.manifest/ref/'+argv.ref+'.yaml')) {
+        console.error('manifest %s.yaml does not exist', argv.ref);
+        process.exit(1);
+    }
     // read the current manifest
     var currentManifestName = libinfo.readCurrentManifestName();
     var content = libinfo.readManifestContent(currentManifestName);
@@ -109,6 +122,7 @@ exports.handler = function (argv) {
         var fromRef = fromManifestContent[fromRepo].ref;
         branchMap[toRepo] = plugin.merge(toRepo, fromRef);
     }
+
     // print output
     console.log("---\ntitle: Merge report: "+argv.ref+" => "+currentManifestName+"\n---\n");
     for(var i=0; i<fromRepoList.length; i++) {
@@ -121,5 +135,10 @@ exports.handler = function (argv) {
         }
         console.log("# "+toRepo);
         console.log("\n```\n"+branchMap[toRepo].stdout+"\n```\n");
+    }
+
+    // If merge was successfull and --delete flag was raised, remove merged directory
+    if( argv.delete === true ) {
+        libinfo.deleteManifest(argv.ref);
     }
 };
