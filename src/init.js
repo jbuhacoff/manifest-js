@@ -80,6 +80,10 @@ exports.builder = function (yargs) {
     })
 };
 exports.handler = function (argv) {
+    if( fs.existsSync('.git')) {
+        console.error('.git folder exists in cwd. Remove to continue.')
+        process.exit(1);
+    }
     if( argv.url === "." ) {
         if( fs.existsSync(".manifest") ) {
             console.error(".manifest already exists");
