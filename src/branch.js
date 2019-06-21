@@ -7,8 +7,12 @@ const libinfo = require('./lib/info');
 exports.command = 'branch <name>';
 exports.describe = 'create a new branch in each repository';
 exports.builder = function (yargs) {
+    // console.log(yargs);
     return yargs.positional('name', {
         describe: 'new branch name'
+    })
+    .option('create', {
+        describe: 'create a new manifest of the same name'
     })
 };
 exports.handler = function (argv) {
@@ -41,6 +45,7 @@ exports.handler = function (argv) {
     if( !isVcsPluginAvailable ) {
         process.exit(1);
     }
+
     // compute new branch name in each repo
     var branchMap = {}; // repo => new branch name
     var isBranchCreated = false;
@@ -63,4 +68,17 @@ exports.handler = function (argv) {
         plugin.createBranch(repo, argv.name);
     }
 
+    // Create manifest file if --create flag is used
+    if( argv.create === true) {
+        var newBranchName = argv.name;
+        if( newBranchName.startsWith('+')) {
+            newManifestName = currentManifestName.concat(newBranchName);
+        }
+        else {
+            newManifestName = newBranchName;
+        }
+        libinfo.writeCurrentManifestName(newManifestName);
+        libinfo.writeManifestContent(newManifestName, content);
+        console.log(newManifestName);
+    }
 };
