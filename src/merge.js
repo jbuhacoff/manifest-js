@@ -140,8 +140,5 @@ exports.handler = function (argv) {
     // If merge was successfull and --delete flag was raised, remove merged directory
     if( argv.delete === true ) {
         libinfo.deleteManifest(argv.ref);
-        console.log('manifest %s.yaml was deleted.', argv.ref);
-        
-        
     }
 };
