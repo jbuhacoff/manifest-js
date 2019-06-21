@@ -7,7 +7,6 @@ const libinfo = require('./lib/info');
 exports.command = 'branch <name>';
 exports.describe = 'create a new branch in each repository';
 exports.builder = function (yargs) {
-    // console.log(yargs);
     return yargs.positional('name', {
         describe: 'new branch name'
     })
@@ -79,6 +78,5 @@ exports.handler = function (argv) {
         }
         libinfo.writeCurrentManifestName(newManifestName);
         libinfo.writeManifestContent(newManifestName, content);
-        console.log(newManifestName);
     }
 };

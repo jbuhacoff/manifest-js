@@ -77,7 +77,7 @@ exports.writeCurrentManifestName = function(name) {
 };
 
 exports.deleteManifest = function(name) {
-    fs.unlinkSync("./manifest/ref/"+name+".yaml");
+    fs.unlinkSync(".manifest/ref/"+name+".yaml");
 }
 
 exports.getRepositoryInfo = getRepositoryInfo;
