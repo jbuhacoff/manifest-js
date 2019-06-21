@@ -34,17 +34,16 @@ function processManifest(name) {
         process.exit(1);
     }
     
+    console.log("Created manifest: %s", name);
+    
     // Clone each repository to the workspace
     var branchMap = {}; // repo => output
-    console.log("--- Cloning Repositories ---\n");
     for(var i=0; i<repoList.length; i++) {
         var repo = repoList[i];
         var plugin = vcsMap[content[repo].vcs];
-        repoURL = content[repo].url;
-        repoRef = content[repo].ref;
         try {
-            plugin.clone(repoURL, repo);
-            console.log("# %s\n\n```\nOK\n```\n", repo)
+            console.log("Cloning %s from %s", repo, content[repo].url);
+            branchMap[repo] = plugin.clone(repo, content[repo].url);
         }
         catch(e) {
             if( e.name === 'Fault' ) {
@@ -55,6 +54,22 @@ function processManifest(name) {
             }
         }
     }
+    // print output
+    console.log("---\ntitle: Init report for: "+name+"\n---\n");
+    for(var i=0; i<repoList.length; i++) {
+        var repo = repoList[i];
+        console.log("# "+repo);
+        if( branchMap[repo].stdout ) {
+            console.log("\nstdout:\n```\n"+branchMap[repo].stdout+"\n```\n");
+        }
+        if( branchMap[repo].stderr ) {
+            console.log("\nstderr:\n```\n"+branchMap[repo].stderr+"\n```\n");
+        }
+        if( branchMap[repo].fault ) {
+            console.log("\nfault:\n```\n"+yaml.safeDump(branchMap[repo].fault)+"\n```\n");
+        }
+    }
+    
 }
 
 exports.command = 'init <url>';
