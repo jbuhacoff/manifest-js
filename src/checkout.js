@@ -42,6 +42,11 @@ exports.handler = function (argv) {
         var plugin = vcsMap[content[repo].vcs];
         var fromRef = content[repo].ref;
         try {
+            // if the repository is not present, clone it first
+            if( !fs.existsSync(repo) ) {
+                console.log("Cloning %s from %s", repo, content[repo].url);
+                branchMap[repo] = plugin.clone(repo, content[repo].url);
+            }
             branchMap[repo] = plugin.checkout(repo, fromRef);
         }
         catch(e) {
