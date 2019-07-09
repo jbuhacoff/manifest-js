@@ -1,6 +1,6 @@
 {
   "name": "@jbuhacoff/manifest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Automates and coordinates actions on repositories",
   "files": [
     "src/manifest.js"
