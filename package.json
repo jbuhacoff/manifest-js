@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jbuhacoff/manifest-js.git"
+    "url": "git+https://github.com/jbuhacoff/nodejs-manifest-util.git"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -40,9 +40,9 @@
   },
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/jbuhacoff/manifest-js/issues"
+    "url": "https://github.com/jbuhacoff/nodejs-manifest-util/issues"
   },
-  "homepage": "https://github.com/jbuhacoff/manifest-js#readme",
+  "homepage": "https://github.com/jbuhacoff/nodejs-manifest-util#readme",
   "dependencies": {
     "deasync": "^0.1.15",
     "js-yaml": "^3.13.1",
