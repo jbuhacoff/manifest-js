@@ -1,4 +1,4 @@
-# manifest-js
+# nodejs-manifest-util
 
 A tool for people who work with many repositories. One manifest to rule them all.
 
