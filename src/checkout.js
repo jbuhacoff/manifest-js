@@ -8,6 +8,14 @@ const libinfo = require('./lib/info');
 exports.command = 'checkout <ref>';
 exports.describe = 'checkout the branch or commit from each repository in the specified manifest';
 exports.handler = function (argv) {
+    // check that the specified manifest exists
+    const pathToSpecifiedManifest = path.join(".manifest","ref",argv.ref+".yaml");
+    if( !fs.existsSync(pathToSpecifiedManifest) ) {
+        console.error("error: file not found: "+pathToSpecifiedManifest);
+        return;
+    }
+    // change current manifest name
+    libinfo.writeCurrentManifestName(argv.ref);
     // read the target manifest
     var currentManifestName = libinfo.readCurrentManifestName();
     var content = libinfo.readManifestContent(argv.ref);
@@ -33,8 +41,6 @@ exports.handler = function (argv) {
     if( !isVcsPluginAvailable ) {
         process.exit(1);
     }
-    // change current manifest name
-    libinfo.writeCurrentManifestName(argv.ref);
     // execute checkout command in each repo and capture output
     var branchMap = {}; // repo => output
     for(var i=0; i<repoList.length; i++) {

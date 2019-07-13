@@ -140,6 +140,10 @@ function initWithRemoteGitRepository(urlString, ref) {
             var targetPath = path.join(".manifest","ref",path.basename(yamlFiles[i]));
             fs.copyFileSync(yamlFiles[i], targetPath);
         }
+        // if there is a "main.yaml", then automatically do a checkout to that manifest
+        if( fs.existsSync(path.join(".manifest","ref","main.yaml"))) {
+            cmdcheckout.handler({ref:"main"});
+        }
     }
     catch(e) {
         if( e.name === 'Fault' ) {
