@@ -56,7 +56,7 @@ If you received the URL to a manifest file, you can initialize the workspace
 with it:
 
 ```
-manifest init https://example.com/path/to/manifest.yaml
+manifest init https://raw.githubusercontent.com/jbuhacoff/manifest/master/main.yaml
 ```
 
 This will download the file, set it as the current manifest, and then checkout
@@ -66,7 +66,7 @@ If you received the URL to a manifest repository, you can initialize the
 workspace with it:
 
 ```
-manifest init https://example.com/path/to/manifest.git
+manifest init https://github.com/jbuhacoff/manifest.git
 ```
 
 This will clone the repository, copy all the manifest files in it to the
