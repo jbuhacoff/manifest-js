@@ -52,7 +52,30 @@ and it can be anywhere that is convenient for you in your filesystem.
 All `manifest` commands should be executed from this directory and will only
 operate on repositories under that directory.
 
-See usage information:
+If you received the URL to a manifest file, you can initialize the workspace
+with it:
+
+```
+manifest init https://example.com/path/to/manifest.yaml
+```
+
+This will download the file, set it as the current manifest, and then checkout
+all the repositories mentioned in the manifest to their specified branches.
+
+If you received the URL to a manifest repository, you can initialize the
+workspace with it:
+
+```
+manifest init https://example.com/path/to/manifest.git
+```
+
+This will clone the repository, copy all the manifest files in it to the
+workspace `.manifest` directory, and then if the repository includes a 
+`main.yaml` then it will automatically be set as the current manifest and
+all the repositories mentioned in it will be checked out to their specified
+branches.
+
+See more usage information:
 
 ```
 manifest --help
@@ -180,7 +203,8 @@ This would execute the command `git pull` in each repository listed in the manif
 
 ```
 manifest init .
-manifest init <url>
+manifest init <url.yaml>
+manifest init <url.git>
 ```
 
 Command behavior: 
@@ -192,10 +216,15 @@ current directory, and all repositories are required to be at a path relative to
 the workspace. This makes the manifest reusable by many people who may clone the
 entire workspace into any directory they want.
 
-All the repositories specified by the manifest file at `<url>` will be cloned
+All the repositories specified by the manifest file at `<url.yaml>` will be cloned
 into the current directory, which
 is the workspace directory `$WORKSPACE_PATH`. If any repository is unreachable
 an error will be emitted.
+
+If `<url.git>` is specified (i.e. the URL to a git repository, and it must end in `.git`)
+that repository will be cloned, and any `.yaml` files in its root directory will be 
+copied to `.manifest/ref`, and if there is a `main.yaml` file it will automatically
+be set as the current manifest (equivalent to doing `manifest checkout main`).
 
 ## Merge
 
