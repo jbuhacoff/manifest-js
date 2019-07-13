@@ -81,7 +81,7 @@ exports.builder = function (yargs) {
 };
 exports.handler = function (argv) {
     if( fs.existsSync('.git')) {
-        console.error('.git folder exists in cwd. Remove to continue.')
+        console.error('found .git folder in workspace')
         process.exit(1);
     }
     if( argv.url === "." ) {
