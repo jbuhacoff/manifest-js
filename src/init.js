@@ -1,11 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
 const yaml = require('js-yaml');
 const libinfo = require('./lib/info');
 const cmdcreate = require('./create');
+const cmdcheckout = require('./checkout');
 const git = require('./vcs/git');
 const https = require('https');
-const cmdcheckout = require('./checkout');
+
+const isYamlFile = function (filepath) {
+    return fs.lstatSync(filepath).isFile() && filepath.endsWith(".yaml");
+};
+
+const listYamlFiles = function (filepath) {
+    return fs.readdirSync(filepath).map(name => path.join(filepath,name)).filter(isYamlFile);
+};
 
 function processManifest(name) {
     // Read manifest to get a list of repositories
@@ -72,6 +81,79 @@ function processManifest(name) {
     
 }
 
+function initWithRemoteManifestFile(url) {
+    // Trim full URL down to name and extension
+    var fullManifestPath = url;
+    var fullManifestName = fullManifestPath.replace(/^.*[\\\/]/, '');
+
+    if( fullManifestPath.endsWith('/')) {
+        currentManifestName = "main";
+    }
+    else {
+        currentManifestName = path.parse(fullManifestName).name;   // Slice extension, regardless of length (e.g. "main.yaml" => "main")
+    }
+
+    // Create manifest.yaml file from URL contents
+    var manifestFile = fs.createWriteStream(".manifest/ref/"+currentManifestName+".yaml");
+    var request = https.get(fullManifestPath, function(response) {
+        response.on('data', (contentYaml) => {
+            fs.writeFileSync(".manifest/ref/"+currentManifestName+".yaml", contentYaml);
+            libinfo.writeCurrentManifestName(currentManifestName);
+            processManifest(currentManifestName);
+            // Checkout each repository
+            cmdcheckout.handler({ref:currentManifestName});
+        });
+    });
+}
+
+// urlString is the url of the git repository, e.g. https://example.com/path/to/manifest.git
+// ref is the optional tag or branch in the repository to checkout, e.g. "projectname"; default value is "master", or not to do a checkout at all after cloning the repository 
+function initWithRemoteGitRepository(urlString, ref) {
+    
+    // get repository name from url
+    const urlObject = url.parse(urlString);
+    var repo = path.basename(urlObject.pathname, ".git");
+    
+    // git clone <url>
+    var result;
+    try {
+        // if the repository is not present, clone it first
+        if( !fs.existsSync(repo) ) {
+            console.log("Cloning %s from %s", repo, urlString);
+            result = git.clone(repo, urlString);
+        }
+        if( result.error || result.fault || !fs.existsSync(repo) ) {
+            console.error("Error: clone failed: %s", urlString);
+            return;
+        }
+        // if a tag or branch was specified, then do a checkout, else expect manifest repository to have initial manifest files in master branch
+        if( ref ) {
+            result = git.checkout(repo, ref);
+            if( result.error || result.fault ) {
+                console.error("Error: cannot checkout %s", ref);
+                return error;
+            }
+        }
+        // there should be some files <repo>/*.yaml to copy into .manifest/ref
+        var yamlFiles = listYamlFiles(repo);
+        for(var i=0; i<yamlFiles.length; i++) {
+            var targetPath = path.join(".manifest","ref",path.basename(yamlFiles[i]));
+            fs.copyFileSync(yamlFiles[i], targetPath);
+        }
+    }
+    catch(e) {
+        if( e.name === 'Fault' ) {
+            result = {fault:e.info};
+        }
+        else {
+            result = {fault:{type:e.name,message:e.message}};
+        }
+    }
+    if( result.error || result.fault ) {
+        console.error("manifest init failed: %o", result);
+    }
+}
+
 exports.command = 'init <url>';
 exports.describe = 'initialize a workspace';
 exports.builder = function (yargs) {
@@ -101,28 +183,14 @@ exports.handler = function (argv) {
         // Create .manifest directory tree
         fs.mkdirSync(".manifest");
         fs.mkdirSync(".manifest/ref");
-
-        // Trim full URL down to name and extension
-        var fullManifestPath = argv.url;
-        var fullManifestName = fullManifestPath.replace(/^.*[\\\/]/, '');
-
-        if( fullManifestPath.endsWith('/')) {
-            currentManifestName = "main";
+        
+        // is url to a .git repository?
+        if( argv.url.endsWith(".git") ) {
+            initWithRemoteGitRepository(argv.url);
         }
         else {
-            currentManifestName = path.parse(fullManifestName).name;   // Slice extension, regardless of length
+            initWithRemoteManifestFile(argv.url);
         }
 
-        // Create manifest.yaml file from URL contents
-        var manifestFile = fs.createWriteStream(".manifest/ref/"+currentManifestName+".yaml");
-        var request = https.get(fullManifestPath, function(response) {
-            response.on('data', (contentYaml) => {
-                fs.writeFileSync(".manifest/ref/"+currentManifestName+".yaml", contentYaml);
-                libinfo.writeCurrentManifestName(currentManifestName);
-                processManifest(currentManifestName);
-                // Checkout each repository
-                cmdcheckout.handler({ref:currentManifestName});
-            });
-        });
     }
 };
