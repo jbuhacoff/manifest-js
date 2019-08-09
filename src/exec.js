@@ -43,14 +43,27 @@ exports.handler = function (argv) {
     var branchMap = {}; // repo => output
     for(var i=0; i<repoList.length; i++) {
         var repo = repoList[i];
+        console.log("%s", repo);
         var filepath = repo;
 //        var cmd = argv.execArgs.join(" "); // see manifest.js for special argv processing that populates execArgs
-        branchMap[repo] = execFileSync(argv.command, argv.execArgs, { cwd: filepath }).toString();
+        try {
+            branchMap[repo] = execFileSync(argv.command, argv.execArgs, { cwd: filepath }).toString();
+        }
+        catch(err) {
+            branchMap[repo] = {status: err.status};
+            if( err.stdout ) { branchMap[repo].stdout = err.stdout.toString(); }
+            if( err.stderr) { branchMap[repo].stderr = err.stderr.toString(); }
+        }
     }
     // print output
     for(var i=0; i<repoList.length; i++) {
         var repo = repoList[i];
         console.log("# "+repo);
-        console.log("\n```\n"+branchMap[repo]+"\n```\n");
+        if( typeof branchMap[repo] === "string" ) {
+            console.log("\n```\n"+branchMap[repo]+"\n```\n");
+        }
+        else {
+            console.log("\nError:\n```\n"+JSON.stringify(branchMap[repo])+"\n```\n");
+        }
     }
 };
