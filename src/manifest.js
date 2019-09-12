@@ -30,6 +30,7 @@ const argv = yargs
     .command(require('./init'))
     .command(require('./merge'))
     .command(require('./status'))
+    .command(require('./update'))
     .demandCommand()
     .strict()
     .parse(yargsArgs, context)
