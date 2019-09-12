@@ -51,7 +51,7 @@ exports.handler = function (argv) {
         }
     }
     // print output
-    console.log("---\ntitle: Manifest status report for: "+currentManifestName+"\n---\n");
+    console.log("---\ntitle: Status report\nmanifest: "+currentManifestName+"\n---\n");
     for(var i=0; i<repoList.length; i++) {
         var repo = repoList[i];
         console.log("# "+repo);
