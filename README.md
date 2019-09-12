@@ -107,14 +107,12 @@ warning is emitted.
 ## Branch
 
 ```
-manifest branch <name> [--create]
+manifest branch <name> [--create|--update]
 ```
 
 Command behavior:
 
-Create a new manifest `<name>`. 
-
-Create a branch named `<name>` in each repository listed in the current
+Create and checkout a branch named `<name>` in each repository listed in the current
 manifest.
 
 If `<name>` starts with `+`, prepends current ref (branch name or commit) to
@@ -130,6 +128,12 @@ If the `--create` option is specified, a new manifest file will also be
 created with the same `<name>` and it will store the same list of repositories but
 with the new branch name for each one. If `<name>` starts with `+`, the new manifest
 name will also be prepended with the current manifest name.
+
+If the `--update` option is specified, the current manifest file will be updated
+to reflect the new branch name in each repository. 
+
+If neither option is specified, the workspace will have the new
+branches checked out but the current manifest will NOT be modified.
 
 ## Checkout
 
@@ -267,6 +271,21 @@ title: Manifest status report for: {manifest}
 
 <info>
 ```
+
+## Update
+
+```
+manifest update
+```
+
+Command behavior:
+
+Updates current manifest to list the current branch in each repository.
+
+This may be necessary if you have created a branch using the `manifest branch`
+command without the `--update` option and now want to update the manifest,
+or if you created a branch using an external tool in any of the repositories
+and now want to reflect that change in the current manifest.
 
 # Procedure
 
