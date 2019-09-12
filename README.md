@@ -272,6 +272,19 @@ title: Manifest status report for: {manifest}
 <info>
 ```
 
+## Tag
+
+```
+manifest tag <name>
+```
+
+Command behavior:
+
+Creates the specified tag in each repository.
+
+If the tag already exists in a repository, errors will be printed to the console
+but will not stop the command from attempting to create the tag in other repositories.
+
 ## Update
 
 ```

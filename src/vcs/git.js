@@ -170,6 +170,23 @@ exports.createBranch = function(filepath,branchName) {
     }
 };
 
+
+/**
+Creates the specified branch locally.
+If branch name starts with '+', prepends current ref (branch name or commit) to create a branch name like '{current}+{name}'
+*/
+exports.createTag = function(filepath,tagName) {
+    try {
+        const repo = libgit(filepath);
+        const addTagSync = deasync(repo.addTag.bind(repo));
+        const result = addTagSync(tagName);
+    }
+    catch(e) {
+        console.error("git.createTag error", e);
+        throw e;
+    }
+};
+
 exports.getStatus = function(filepath) {
     var status = {};
     status.stdout = execFileSyncWrapper("git",["status"], { cwd: filepath }).toString();//.replace(/\r?\n$/,"");
