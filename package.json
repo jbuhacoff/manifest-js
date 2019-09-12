@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "Automates and coordinates actions on repositories",
   "main": "src/manifest",
-  "preferGlobal": "true",
+  "preferGlobal": true,
   "bin": {
     "manifest": "src/manifest.js"
   },
