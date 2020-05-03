@@ -24,6 +24,14 @@ There's a manifest tool for that :)
 
 This code is still under development and is not yet suitable for regular use.
 
+Table of contents:
+
+[Pre-requisites](#pre-requisites)
+[Installation](#installation)
+[Getting started](#getting-started)
+[Available commands](#command)
+[User guide](#user-guide)
+
 # Pre-requisites
 
 * NodeJS
@@ -84,6 +92,20 @@ manifest --help <command>
 
 
 # Command
+
+Table of contents:
+
+[Add](#add)
+[Branch](#branch)
+[Checkout](#checkout)
+[Create](#create)
+[Delete](#delete)
+[Exec](#exec)
+[Init](#init)
+[Merge](#merge)
+[Status](#status)
+[Tag](#tag)
+[Update](#update)
 
 ## Add
 
@@ -300,7 +322,7 @@ command without the `--update` option and now want to update the manifest,
 or if you created a branch using an external tool in any of the repositories
 and now want to reflect that change in the current manifest.
 
-# Procedure
+# User guide
 
 ## Creating a workspace
 
