@@ -31,6 +31,7 @@ Table of contents:
 * [Getting started](#getting-started)
 * [Available commands](#command)
 * [User guide](#user-guide)
+* [Design](#design)
 
 # Pre-requisites
 
@@ -440,12 +441,32 @@ fix in each repository.
 
 # Design
 
-## Manifest files
+Table of contents:
+
+* [Quality intents](#quality-intents)
+* [Workspace manifest](#workspace-manifest)
+* [Manifest format](#manifest-format)
+
+## Quality intents
+
+* PERFORMANT: The software SHOULD perform work in parallel wherever possible
+* RELIABLE: The software MUST NOT irreversibly delete any data without a warning
+  and interactive user consent; a default selection in this case would be to cancel the
+  operation
+
+## Workspace manifest
 
 A workspace can have multiple manifest files to allow easy transitions from one set of
 repositories with their branches to another set. 
 
 Each manifest file is stored at `.manifest/ref/{name}.yaml`
+
+A special file named `current` points the `manifest` tool at the current manifest for
+the workspace.
+
+The name of the current manifest is stored in the file `.manifest/current`.
+If the variable `{current}` is the content of that file, then it corresponds to
+a manifest file stored at `.manifest/ref/{current}.yaml`. 
 
 ## Manifest format
 
@@ -477,11 +498,3 @@ If you are using source control with a project that is not yet shared anywhere, 
 skip the `url` key so there is no pushing or pulling, and you can still use the manifest
 tool to manage branches and commits for local repositories.
 
-## Current manifest
-
-A special file named `current` points the `manifest` tool at the current manifest for
-the workspace.
-
-The name of the current manifest is stored in the file `.manifest/current`.
-If the variable `{current}` is the content of that file, then it corresponds to
-a manifest file stored at `.manifest/ref/{current}.yaml`. 
