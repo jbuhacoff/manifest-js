@@ -324,7 +324,16 @@ and now want to reflect that change in the current manifest.
 
 # User guide
 
-## Creating a workspace
+Table of contents:
+
+* [Create workspace](#create-workspace)
+* [Initialize workspace](#initialize-workspace)
+* [Add repository](#add-repository)
+* [Create branch](#create-branch)
+* [Update workspace](#update-workspace)
+* [Commit changes](#commit-changes)
+
+## Create workspace
 
 A workspace is just a directory where you will have a manifest and repositories.
 
@@ -334,7 +343,7 @@ concurrently. If your IDE has a workspaces feature, this makes it convenient to 
 all repositories from one workspace and open all repositories from another workspace
 with one command.
 
-## Initialize a workspace
+## Initialize workspace
 
 To get a copy of all the relevant repositories and checkout the appropriate
 branch in each one according to a prefdefined repository set, you only 
@@ -352,7 +361,7 @@ manifest init .
 
 Note that the `.` is a special case. You cannot use a path to any other directory here.
 
-## Preparing to initialize a workspace
+On preparing to initialize a workspace:
 
 Someone needs to post a file at a URL for the `manifest init` command to download.
 
@@ -360,14 +369,14 @@ That file needs to mention each repository to checkout and the URL for that
 repository. It's convenient to keep this file also as part of a source repository,
 so it can be maintained and shared easily.
 
-## Adding a repository
+## Add repository
 
 The repository must already be checked out and stored
 in the workspace. This command will add it to the manifest in its current state.
 
 `manifest add <path relative to workspace> [--ref <ref>]`
 
-## Creating a feature branch
+## Create branch
 
 To start working on a new feature, you need to create a corresponding branch
 in each repository. Without the manifest tool, it could be tedious to do that
@@ -404,7 +413,7 @@ branch `v1.0+next`, the command `manifest branch +feature#123` will create branc
 `master+feature#123` in repository A and branch `v1.0+next+feature#123` in 
 repository B.
 
-## Updating repositories
+## Update workspace
 
 To keep your branches up to date with remote changes, you could run `git pull`
 in each repository like this:
@@ -413,7 +422,11 @@ in each repository like this:
 manifest exec git pull
 ```
 
-## Commiting changes to repositories
+It's recommended to keep the manifest repository itself always on the `master` branch so
+it can be used for immediate sharing of newly created or deleted manifest names with the
+team. 
+
+## Commit changes
 
 The manifest tool does not commit changes for you. The changes in each repository may
 be of different nature and scope. It does provide a way to automate making a similar
@@ -425,18 +438,6 @@ This would execute the command `git commit -m <message>` in each repository list
 in the manifest. It might be appropriate for housekeeping tasks like doing a similar
 fix in each repository. 
 
-## Using local repositories
-
-If you are using source control with a project that is not yet shared anywhere, you can 
-define repositories in `src` and skip the `io` definitions. Commands that interact with
-remote servers will either not work or emit warnings that `io` definitions are missing.
-
-## Synchronizing manifests
-
-It's recommended to keep the manifest repository itself always on the `master` branch so
-it can be used for immediate sharing of newly created or deleted manifest names with the
-team. 
-
 # Design
 
 ## Manifest files
@@ -445,6 +446,36 @@ A workspace can have multiple manifest files to allow easy transitions from one 
 repositories with their branches to another set. 
 
 Each manifest file is stored at `.manifest/ref/{name}.yaml`
+
+## Manifest format
+
+A manifest file is a list of repositories (directory names) and their metadata
+in YAML format. For example:
+
+```
+super-awesome-software:
+  url: 'ssh://user@git.example.com/project1/super-awesome-software.git'
+  ref: master
+  vcs: git
+handbook:
+  url: 'ssh://user@git.example.com/project1/handbook.git'
+  ref: master
+  vcs: git
+utilities:
+  url: 'ssh://user@git.example.com/project1/utilities.git'
+  ref: master
+  vcs: git
+```
+
+This corresponds to a workspace with the following directories:
+
+* `super-awesome-software`
+* `handbook`
+* `utilities`
+
+If you are using source control with a project that is not yet shared anywhere, you can 
+skip the `url` key so there is no pushing or pulling, and you can still use the manifest
+tool to manage branches and commits for local repositories.
 
 ## Current manifest
 
