@@ -26,11 +26,11 @@ This code is still under development and is not yet suitable for regular use.
 
 Table of contents:
 
-[Pre-requisites](#pre-requisites)
-[Installation](#installation)
-[Getting started](#getting-started)
-[Available commands](#command)
-[User guide](#user-guide)
+* [Pre-requisites](#pre-requisites)
+* [Installation](#installation)
+* [Getting started](#getting-started)
+* [Available commands](#command)
+* [User guide](#user-guide)
 
 # Pre-requisites
 
@@ -95,17 +95,17 @@ manifest --help <command>
 
 Table of contents:
 
-[Add](#add)
-[Branch](#branch)
-[Checkout](#checkout)
-[Create](#create)
-[Delete](#delete)
-[Exec](#exec)
-[Init](#init)
-[Merge](#merge)
-[Status](#status)
-[Tag](#tag)
-[Update](#update)
+* [Add](#add)
+* [Branch](#branch)
+* [Checkout](#checkout)
+* [Create](#create)
+* [Delete](#delete)
+* [Exec](#exec)
+* [Init](#init)
+* [Merge](#merge)
+* [Status](#status)
+* [Tag](#tag)
+* [Update](#update)
 
 ## Add
 
