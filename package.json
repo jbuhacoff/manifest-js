@@ -44,13 +44,13 @@
   },
   "homepage": "https://github.com/jbuhacoff/nodejs-manifest-util#readme",
   "dependencies": {
-    "deasync": "^0.1.15",
+    "deasync": "^0.1.20",
     "js-yaml": "^3.13.1",
-    "simple-git": "^1.124.0",
-    "yargs": "^13.3.0"
+    "simple-git": "^1.132.0",
+    "yargs": "^13.3.2"
   },
   "devDependencies": {
-    "@commitlint/utils": "^8.1.0",
+    "@commitlint/utils": "^8.3.4",
     "@jbuhacoff/commitlint-config-type-enum": "^1.0.0"
   }
 }
